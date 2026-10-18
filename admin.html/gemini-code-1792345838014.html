@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libaas Bucket | Admin Control Center</title>
+    <!-- Font Awesome Icons & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-black: #0a0a0a;
+            --bg-card: #141414;
+            --bg-input: #1f1f1f;
+            --gold-primary: #d4af37;
+            --gold-light: #f3e5ab;
+            --maroon-dark: #3a0007;
+            --text-white: #ffffff;
+            --text-gray: #a0a0a0;
+            --border-gold: rgba(212, 175, 55, 0.3);
+            --font-heading: 'Cinzel', serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-body);
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-white);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-card);
+            border-right: 1px solid var(--border-gold);
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-gold);
+            margin-bottom: 25px;
+        }
+
+        .brand-header h2 {
+            font-family: var(--font-heading);
+            color: var(--gold-primary);
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+        }
+
+        .brand-header p {
+            font-size: 0.65rem;
+            color: var(--text-gray);
+            letter-spacing: 3px;
+        }
+
+        .menu-list {
+            list-style: none;
+            flex: 1;
+        }
+
+        .menu-item {
+            padding: 12px 18px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.3s;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.15), transparent);
+            color: var(--gold-primary);
+            border-left: 3px solid var(--gold-primary);
+        }
+
+        .btn-exit {
+            background: transparent;
+            border: 1px solid #d9534f;
+            color: #d9534f;
+            padding: 10px;
+            width: 100%;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .btn-exit:hover {
+            background: #d9534f;
+            color: #fff;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .page-title {
+            font-family: var(--font-heading);
+            color: var(--gold-primary);
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+        }
+
+        /* Form Controls */
+        .form-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            color: var(--gold-light);
+        }
+
+        .form-group input, .form-group select {
+            background: var(--bg-input);
+            border: 1px solid #333;
+            color: #fff;
+            padding: 10px 12px;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--gold-primary);
+        }
+
+        .btn-gold {
+            background: linear-gradient(45deg, #d4af37, #aa7c11);
+            color: #000;
+            border: none;
+            padding: 12px 25px;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .btn-gold:hover {
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Table Design */
+        .table-responsive {
+            overflow-x: auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid #222;
+        }
+
+        th {
+            background-color: rgba(212, 175, 55, 0.1);
+            color: var(--gold-primary);
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+        }
+
+        td img {
+            width: 50px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: none;
+            color: #ff4d4d;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="brand-header">
+            <h2>LIBAAS BUCKET</h2>
+            <p>ADMIN CONTROL PANEL</p>
+        </div>
+        <ul class="menu-list">
+            <li class="menu-item active" onclick="switchTab('manage-products')">
+                <i class="fa-solid fa-shirt"></i> Manage Suits / Products
+            </li>
+            <li class="menu-item" onclick="switchTab('add-product')">
+                <i class="fa-solid fa-plus"></i> Add New Suit
+            </li>
+            <li class="menu-item" onclick="switchTab('orders-list')">
+                <i class="fa-solid fa-list-check"></i> Customer Orders
+            </li>
+        </ul>
+        <button class="btn-exit" onclick="logoutAdmin()"><i class="fa-solid fa-right-from-bracket"></i> Back to Store</button>
+    </aside>
+
+    <!-- Main Dashboard Area -->
+    <main class="main-content">
+
+        <!-- Tab 1: Product List -->
+        <section id="manage-products" class="tab-content active">
+            <h1 class="page-title">Catalog Inventory</h1>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-product-rows">
+                        <!-- Products will render here dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Tab 2: Add New Suit -->
+        <section id="add-product" class="tab-content">
+            <h1 class="page-title">Add New Suit to Shop</h1>
+            <div class="form-card">
+                <form id="add-suit-form" onsubmit="saveNewProduct(event)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Suit Title / Name</label>
+                            <input type="text" id="suit-title" placeholder="e.g. Royal Velvet Formal" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="suit-category" required>
+                                <option value="Bridal">Bridal / Heavy Formal</option>
+                                <option value="Festive">Festive Lawn / Chiffon</option>
+                                <option value="Pret">Ready to Wear (Pret)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Price (PKR)</label>
+                            <input type="number" id="suit-price" placeholder="15000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Image File Path or URL</label>
+                            <input type="text" id="suit-image" placeholder="assets/products/suit-1.jpg" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-gold"><i class="fa-solid fa-check"></i> Save & Publish Suit</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Tab 3: Customer Orders View -->
+        <section id="orders-list" class="tab-content">
+            <h1 class="page-title">Recent Orders</h1>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer Name</th>
+                            <th>Phone</th>
+                            <th>Payment</th>
+                            <th>Total Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-orders-rows">
+                        <tr>
+                            <td colspan="5" style="text-align:center; color: var(--text-gray);">No local order history recorded yet. Direct orders go to WhatsApp!</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Sample Default Products
+        const defaultProducts = [
+            { id: 1, title: "Royal Velvet Formal Suit", category: "Bridal", price: 18500, image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80" },
+            { id: 2, title: "Embroidered Chiffon 3-Piece", category: "Festive", price: 12500, image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80" },
+            { id: 3, title: "Luxury Silk Printed Pret", category: "Pret", price: 8900, image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=600&q=80" }
+        ];
+
+        let products = JSON.parse(localStorage.getItem('lb_products')) || defaultProducts;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderProductsTable();
+        });
+
+        // Tab Switching Function
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Render Inventory Table
+        function renderProductsTable() {
+            const tbody = document.getElementById("admin-product-rows");
+            tbody.innerHTML = "";
+
+            products.forEach((prod, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><img src="${prod.image}" alt="Suit Image"></td>
+                        <td>${prod.title}</td>
+                        <td><span style="color:var(--gold-light);">${prod.category}</span></td>
+                        <td>PKR ${prod.price.toLocaleString()}</td>
+                        <td>
+                            <button class="action-btn" onclick="deleteProduct(${index})"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Add Product Logic
+        function saveNewProduct(e) {
+            e.preventDefault();
+            const title = document.getElementById("suit-title").value;
+            const category = document.getElementById("suit-category").value;
+            const price = parseFloat(document.getElementById("suit-price").value);
+            const image = document.getElementById("suit-image").value;
+
+            const newSuit = {
+                id: Date.now(),
+                title: title,
+                category: category,
+                price: price,
+                image: image
+            };
+
+            products.push(newSuit);
+            localStorage.setItem('lb_products', JSON.stringify(products));
+
+            renderProductsTable();
+            document.getElementById("add-suit-form").reset();
+            alert("New Suit Added Successfully!");
+            switchTab('manage-products');
+        }
+
+        // Delete Product
+        function deleteProduct(index) {
+            if (confirm("Are you sure you want to remove this suit from the shop?")) {
+                products.splice(index, 1);
+                localStorage.setItem('lb_products', JSON.stringify(products));
+                renderProductsTable();
+            }
+        }
+
+        // Logout Back to Homepage
+        function logoutAdmin() {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

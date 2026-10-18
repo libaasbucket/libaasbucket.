@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libaas Bucket | Luxury Pakistani Ladies Wear</title>
+    <!-- Font Awesome Icons & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="top-bar">
+        <span>✨ Welcome to Libaas Bucket | Your Bucket Full of Luxury - 100% Original Pakistani Brands ✨</span>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand-logo">
+                <h1>LIBAAS BUCKET</h1>
+                <p>LUXURY PRET & FORMALS</p>
+            </div>
+            <nav class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#shop">Shop Collections</a>
+                <a href="#about">About Us</a>
+                <a href="#contact">Contact</a>
+                <button class="btn-admin" onclick="openAdminModal()"><i class="fa-solid fa-lock"></i> Admin Panel</button>
+            </nav>
+            <div class="nav-icons">
+                <div class="cart-icon" onclick="toggleCart()">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span id="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner Section -->
+    <section id="home" class="hero">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h2>Exquisite Pakistani Luxury Suits</h2>
+                <p>Festive Collections • Embroidered Suits • Chiffon & Silk Collections</p>
+                <a href="#shop" class="btn-gold">Explore Collection <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Filters & Shop Section -->
+    <section id="shop" class="shop-section">
+        <div class="section-title">
+            <h2>Our Featured Collections</h2>
+            <div class="gold-divider"></div>
+        </div>
+
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterProducts('all')">All Suits</button>
+            <button class="filter-btn" onclick="filterProducts('Bridal')">Bridal / Heavy Formal</button>
+            <button class="filter-btn" onclick="filterProducts('Festive')">Festive Lawn / Chiffon</button>
+            <button class="filter-btn" onclick="filterProducts('Pret')">Ready to Wear (Pret)</button>
+        </div>
+
+        <div class="product-grid" id="product-list">
+            <!-- Dynamic products loaded by script.js -->
+        </div>
+    </section>
+
+    <!-- Shopping Cart Modal Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Shopping Bucket</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <p class="empty-msg">Your bucket is currently empty.</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total Amount:</span>
+                <strong id="cart-total-price">PKR 0</strong>
+            </div>
+            <button class="btn-gold block" onclick="openCheckoutModal()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Order / Checkout Modal -->
+    <div class="modal" id="checkout-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeCheckoutModal()">&times;</span>
+            <h2>Complete Your Order</h2>
+            <div class="gold-divider"></div>
+            <form id="order-form" onsubmit="handleOrderSubmit(event)">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="cust-name" required placeholder="e.g. Ayesha Khan">
+                </div>
+                <div class="form-group">
+                    <label>WhatsApp / Phone Number *</label>
+                    <input type="tel" id="cust-phone" required placeholder="03001234567">
+                </div>
+                <div class="form-group">
+                    <label>Complete Delivery Address *</label>
+                    <textarea id="cust-address" required placeholder="House No, Street, City, Province"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select id="cust-payment">
+                        <option value="COD">Cash on Delivery (COD)</option>
+                        <option value="Bank Deposit">Direct Bank Transfer / EasyPaisa / JazzCash</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-gold block"><i class="fa-brands fa-whatsapp"></i> Order via WhatsApp</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="modal" id="admin-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAdminModal()">&times;</span>
+            <h2>Admin Authentication</h2>
+            <div class="gold-divider"></div>
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="form-group">
+                    <label>Enter Admin PIN Code</label>
+                    <input type="password" id="admin-pin" placeholder="Enter PIN" required>
+                </div>
+                <button type="submit" class="btn-gold block">Login to Admin Panel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Direct WhatsApp Floating Button -->
+    <a href="https://wa.me/923001234567?text=Hi%20Libaas%20Bucket,%20I%20have%20a%20query%20about%20your%20collection." class="whatsapp-float" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>LIBAAS BUCKET</h3>
+                <p>Your Bucket Full of Luxury. Delivering high-quality designer suits across Pakistan & Worldwide.</p>
+            </div>
+            <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p><i class="fa-solid fa-phone"></i> +92 300 1234567</p>
+                <p><i class="fa-solid fa-location-dot"></i> Lahore, Punjab, Pakistan</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Libaas Bucket. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
